@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Page {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  navLabel        String?
+  metaDescription String?
+  isHome          Boolean  @default(false)
+  published       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  blocks    Block[]
+  menuItems MenuItem[]
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type      String
+  order     Int      @default(0)
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageId])
+}
+
+model MenuItem {
+  id          String     @id @default(cuid())
+  label       String
+  order       Int        @default(0)
+  parentId    String?
+  parent      MenuItem?  @relation("MenuChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children    MenuItem[] @relation("MenuChildren")
+  pageId      String?
+  page        Page?      @relation(fields: [pageId], references: [id], onDelete: SetNull)
+  externalUrl String?
+  openNewTab  Boolean    @default(false)
+
+  @@index([parentId])
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  filename  String
+  kind      String
+  width     Int?
+  height    Int?
+  altText   String?
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id           Int     @id @default(1)
+  siteName     String  @default("Eva Mandisa")
+  tagline      String?
+  logoUrl      String?
+  faviconUrl   String?
+  footerText   String?
+  contactNote  String?
+  instagramUrl String?
+  facebookUrl  String?
+  tiktokUrl    String?
+  youtubeUrl   String?
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  eventType String?
+  message   String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

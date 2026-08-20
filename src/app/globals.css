@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #000000;
+  --color-panel: #111111;
+  --color-panel-hover: #222222;
+  --color-paper: #ffffff;
+  --color-muted: #b9b9b9;
+  --color-muted-2: #8a8a8a;
+  --color-accent: #c9a24b;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-panel: var(--color-panel);
+  --color-panel-hover: var(--color-panel-hover);
+  --color-paper: var(--color-paper);
+  --color-muted: var(--color-muted);
+  --color-muted-2: var(--color-muted-2);
+  --color-accent: var(--color-accent);
+
+  --font-display: var(--font-alegreya);
+  --font-sans: var(--font-roboto);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+}
+
+.bg-cloth {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.72)),
+    url("/media/black-cloth-bg.jpg");
+  background-repeat: repeat;
+  background-size: 900px auto;
+}
+
+.text-balance-pretty {
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-up {
+    animation: fade-up 0.7s ease both;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

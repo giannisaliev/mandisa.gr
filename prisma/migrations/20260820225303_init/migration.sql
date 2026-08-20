@@ -1,0 +1,85 @@
+-- CreateTable
+CREATE TABLE "Page" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "slug" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "navLabel" TEXT,
+    "metaDescription" TEXT,
+    "isHome" BOOLEAN NOT NULL DEFAULT false,
+    "published" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Block" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "pageId" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "data" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "Block_pageId_fkey" FOREIGN KEY ("pageId") REFERENCES "Page" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "MenuItem" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "label" TEXT NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "parentId" TEXT,
+    "pageId" TEXT,
+    "externalUrl" TEXT,
+    "openNewTab" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "MenuItem_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "MenuItem" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "MenuItem_pageId_fkey" FOREIGN KEY ("pageId") REFERENCES "Page" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "MediaAsset" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "url" TEXT NOT NULL,
+    "filename" TEXT NOT NULL,
+    "kind" TEXT NOT NULL,
+    "width" INTEGER,
+    "height" INTEGER,
+    "altText" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "Settings" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT DEFAULT 1,
+    "siteName" TEXT NOT NULL DEFAULT 'Eva Mandisa',
+    "tagline" TEXT,
+    "logoUrl" TEXT,
+    "faviconUrl" TEXT,
+    "footerText" TEXT,
+    "contactNote" TEXT,
+    "instagramUrl" TEXT,
+    "facebookUrl" TEXT,
+    "tiktokUrl" TEXT,
+    "youtubeUrl" TEXT
+);
+
+-- CreateTable
+CREATE TABLE "ContactSubmission" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "subject" TEXT,
+    "eventType" TEXT,
+    "message" TEXT,
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Page_slug_key" ON "Page"("slug");
+
+-- CreateIndex
+CREATE INDEX "Block_pageId_idx" ON "Block"("pageId");
+
+-- CreateIndex
+CREATE INDEX "MenuItem_parentId_idx" ON "MenuItem"("parentId");
