@@ -1,7 +1,7 @@
 import { readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import type {
   HeroData,
   HeadingData,
@@ -15,7 +15,7 @@ import type {
   ContactFormData,
 } from "../src/lib/blocks";
 
-const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL! });
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 function img(filename: string) {
